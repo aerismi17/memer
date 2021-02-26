@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import './App.css';
 import styled from 'styled-components'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 
 function App() {
@@ -101,6 +101,7 @@ const Body = styled.div`
   flex-wrap: wrap;
   flex: 1;
   overflow: auto;
+  justify-content: center;
 `
 
 export default App;
