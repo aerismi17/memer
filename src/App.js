@@ -3,6 +3,7 @@ import './App.css';
 import styled from 'styled-components'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 function App() {
@@ -29,12 +30,15 @@ function App() {
       <TextField label="Search for a Meme" variant="outlined" style = {{width: 'calc(100% - 110px)'}}
         value = {text} onChange = {e=> setText(e.target.value)}
         autoFocus
+        onKeyPress = {e => e.key=== 'Enter' && getMemes()}
       />
       <Button variant="contained" color="primary" style = {{height: 55, marginLeft: 10, width: 100}}
         disabled = {!text || loading} onClick = {getMemes}>
         Search
       </Button>
+      {loading && <LinearProgress />}
       </Header>
+      
       <Body>
         {memes.map(m=> <Meme key = {m.id} src={m.images.fixed_width.url}/>)}
       </Body>
@@ -44,6 +48,10 @@ function App() {
 
 const Meme = styled.img`
   max-height:200px;
+  max-width: 200px;
+  min-width: 200px;
+  object-fit: cover;
+  margin: 5px;
 `
 const Wrap = styled.div`
   display:flex;
