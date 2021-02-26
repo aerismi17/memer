@@ -9,11 +9,11 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 function App() {
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
-  const [memes, setMemes] = useState([])
+  const [memes, setMemes] = useState(null)
 
   async function getMemes(){
     setLoading(true)
-    setMemes([])
+    setMemes(null)
     let url = 'https://api.giphy.com/v1/gifs/search?'
     url += 'api_key=' + 'jhQazp87aPuMIRIZoFu2kaI2Uk5GjZRJ'
     url += '&q=' + text
@@ -27,27 +27,40 @@ function App() {
   return (
     <Wrap>
       <Header>
-      <TextField label="Search for a Meme" variant="outlined" style = {{width: 'calc(100% - 110px)'}}
-        value = {text} onChange = {e=> setText(e.target.value)}
-        autoFocus
-        onKeyPress = {e => e.key=== 'Enter' && getMemes()}
-      />
-      <Button variant="contained" color="primary" style = {{height: 55, marginLeft: 10, width: 100}}
-        disabled = {!text || loading} onClick = {getMemes}>
-        Search
-      </Button>
-      {loading && <LinearProgress />}
+        <TextField label="Search for a Meme" variant="outlined" style = {{width: 'calc(100% - 110px)'}}
+          value = {text} onChange = {e=> setText(e.target.value)} autoFocus
+          onKeyPress = {e => e.key=== 'Enter' && getMemes()}
+        />
+        <Button variant="contained" color="primary" style = {{height: 55, marginLeft: 10, width: 100}}
+          disabled = {!text || loading} onClick = {getMemes}>
+          Search
+        </Button>
       </Header>
-      
-      <Body>
-        {memes.map(m=> <Meme key = {m.id} src={m.images.fixed_width.url}/>)}
-      </Body>
+
+      {loading && <LinearProgress />}
+
+      {memes && memes.length===0 && <Empty>
+        no memes found!  
+      </Empty>}
+
+      {memes && memes.length>0 && <Body>
+        {memes && memes.map(m=> {
+          const img = m.images && m.images.fixed_width && m.images.fixed_width.url
+          return <Meme key={m.id} src={img} />
+        })}
+      </Body>}
     </Wrap>
   );
 }
 
+const Empty = styled.p`
+  width: 100%;
+  text-align: center;
+`
+
 const Meme = styled.img`
   max-height:200px;
+  min-height: 200px
   max-width: 200px;
   min-width: 200px;
   object-fit: cover;
